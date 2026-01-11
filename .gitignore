@@ -1,0 +1,13 @@
+*.o
+zkpurge
+compile_commands.json
+.cache/
+.clangd/
+.vscode/
+.idea/
+.vs/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
