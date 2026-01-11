@@ -1,4 +1,4 @@
-CC = clang
+CC = cc
 CFLAGS = -std=c23 -O2 -Wall -Wextra -pedantic
 TARGET = zkpurge
 OBJS = main.o util.o zbm.o
