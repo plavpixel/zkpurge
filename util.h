@@ -1,6 +1,8 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include <stdbool.h>
+
 bool is_root(void);
 const char* detect_zbm_path(void);
 int natural_compare(const char* s1, const char* s2);

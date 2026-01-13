@@ -1,5 +1,6 @@
 CC = cc
-CFLAGS = -std=c23 -O2 -Wall -Wextra -pedantic
+CFLAGS ?= -O2 -Wall -Wextra -pedantic
+CFLAGS += -std=c23
 TARGET = zkpurge
 OBJS = main.o util.o zbm.o
 
