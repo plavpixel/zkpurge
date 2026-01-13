@@ -45,4 +45,4 @@ compdb:
 		echo "]"; \
 	) > ./compile_commands.json
 
-.PHONY: install uninstall clean build compdb
+.PHONY: install uninstall clean compdb
