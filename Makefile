@@ -1,27 +1,48 @@
-CC = cc
-CFLAGS ?= -O2 -Wall -Wextra -pedantic
-CFLAGS += -std=c23
-TARGET = zkpurge
-OBJS = main.o util.o zbm.o
+# credit to github/WladimirBec for makefile structure
+DESTDIR ?=
+PREFIX  ?= /usr
+BLDD    := $(abspath ./bld)
 
-.PHONY: all build clean install uninstall
+CC     ?= clang
+CFLAGS := -Wall -Wextra -Werror \
+		  -D_POSIX_C_SOURCE=200809L \
+		  -std=c23 \
+		  $(if $(filter 1,$(DEBUG)),-O0 -g,-O3 -flto -pipe)
+LDFLAGS := $(if $(filter 1,$(DEBUG)),,-static)
+SRCS   := main.c util.c zbm.c
+OBJS   := $(patsubst %.c,$(BLDD)/%.o,$(SRCS))
+TARGET := zkpurge
 
-all: build
+$(BLDD)/$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
-build: $(TARGET)
+$(BLDD):
+	@ mkdir -p $@
 
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+$(OBJS): $(BLDD)/%.o: %.c | $(BLDD)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-main.o: main.c defs.h zbm.h util.h
-util.o: util.c util.h defs.h
-zbm.o: zbm.c zbm.h util.h defs.h
-
-clean:
-	rm -f $(TARGET) $(OBJS)
-
-install: build
-	install -m 755 $(TARGET) /usr/local/bin/$(TARGET)
+install: $(BLDD)/$(TARGET)
+	install -Dm755 $< $(DESTDIR)$(PREFIX)/bin/$(TARGET)
 
 uninstall:
-	rm -f /usr/local/bin/$(TARGET)
+	rm -f $(DESTDIR)$(PREFIX)/bin/$(TARGET)
+
+clean:
+	rm -fr $(BLDD)
+	rm -f compile_commands.json
+
+compdb:
+	@ ( \
+		echo "["; \
+		for src in $(SRCS); do \
+			echo "  {"; \
+			echo "    \"directory\": \"$(BLDD)\","; \
+			echo "    \"file\": \"../$$src\","; \
+			echo "    \"command\": \"$(CC) $(CFLAGS) -c $$src -o $(BLDD)/$${src%.c}.o\""; \
+			echo "  },"; \
+		done; \
+		echo "]"; \
+	) > ./compile_commands.json
+
+.PHONY: install uninstall clean build compdb
