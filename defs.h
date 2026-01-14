@@ -4,6 +4,7 @@
 #include <stddef.h>
 
 #define MAX_PATH_LEN 4096
+#define PROG_VERSION "1.1.0"
 
 static const char SYS_EFI_PATH[] = "/sys/firmware/efi";
 static const char DEFAULT_EFI_ZBM[] = "/boot/efi/EFI/zbm";
