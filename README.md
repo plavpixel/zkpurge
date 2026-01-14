@@ -1,3 +1,4 @@
+
 # zkpurge
 
 minimal C-lang utility to purge old ZFSBootMenu executables<br/>
@@ -6,7 +7,7 @@ based on Void's [vkpurge(8)](https://man.voidlinux.org/vkpurge)
 ## Compiling
 Clone the repo:
 ```shell
-git clone https://github.com/plavpixel/zkpurge.git && cd zkpurge
+git clone [https://github.com/plavpixel/zkpurge.git](https://github.com/plavpixel/zkpurge.git) && cd zkpurge
 ```
 
 Build:
@@ -25,14 +26,26 @@ sudo make uninstall
 ```
 
 ## Usage
-
 ```bash
-zkpurge list
-sudo zkpurge rm 3.1.0_1
-sudo zkpurge rm all # won't remove latest, can be manually overridden
+# list available kernels
+zkpurge -l
+
+# remove a specific version
+sudo zkpurge -r 3.1.0_1
+
+# remove all except latest and pinned
+sudo zkpurge -r all
 ```
 
-#### Environment:
+### Options
+- `-l`, `--list`: List available ZBM kernels.
+- `-r`, `--remove`: Remove kernels (requires target).
+- `-v`, `--version`: Show version and attribution.
+- `-h`, `--help`: Show usage help.
 
-- `ZBM_PATH`: override auto-detected directory.
-- `ZBM_PROTECT`: version string to keep during `rm all`.
+### Environment Overrides
+- `ZBM_PATH`: Override auto-detected directory.
+- `ZBM_PROTECT`: Version string to keep during `-r all`.
+
+## License
+Public Domain
